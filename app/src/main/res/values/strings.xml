@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">TheCoffeeCove</string>
+    <string name="todo1">todo1</string>
+    <string name="welcome_to_hiba_s_coffee_house1" />
+    <string name="find_your_best_coffee_in_nsylhet_town" />
+    <string name="get_started1" />
+    <string name="admin" />
+    <string name="welcome_to_hiba_s_coffee_house2">welcome_to_hiba_s_coffee_house1</string>
+    <string name="welcome_to_hiba_s_coffee_house">1</string>
+    <string name="welcome_to_hiba_s_coffee_house4">welcome_to_hiba_s_coffee_house</string>
+    <string name="welcome_to_the_coffe_cove">Welcome to The Coffe Cove</string>
+    <string name="find_best_coffee_in_sylhet_town">Find Best Coffee In Sylhet Town</string>
+    <string name="welcome_to_the_coffee_cove">welcome_to_the_coffee_cove</string>
+    <string name="welcome_to_the_coffee_cove1">Welcome To The Coffee Cove</string>
+    <string name="get_started">Get Started</string>
+    <string name="Admin">Admin</string>
 </resources>
