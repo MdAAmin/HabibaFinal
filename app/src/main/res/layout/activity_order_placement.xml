@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#f8f8f8">
+
+
+    <TextView
+        android:id="@+id/text_view_product_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="#259C27B0"
+        android:padding="8dp"
+        android:text="@string/product_name1"
+        android:textColor="#333333"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:ignore="TextContrastCheck" />
+
+
+    <TextView
+        android:id="@+id/text_view_product_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="#259C27B0"
+        android:padding="8dp"
+        android:text="@string/product_price"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:ignore="TextContrastCheck" />
+
+
+    <TextView
+        android:id="@+id/text_view_product_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="#259C27B0"
+        android:padding="8dp"
+        android:text="@string/product_quantity1"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:ignore="TextContrastCheck" />
+
+
+    <EditText
+        android:id="@+id/edit_text_order_instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:autofillHints=""
+        android:background="#1B009688"
+        android:hint="@string/order_instructions"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:padding="8dp"
+        android:textSize="18sp"
+        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+
+    <Button
+        android:id="@+id/button_place_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/black"
+        android:padding="16dp"
+        android:text="@string/place_order"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        tools:ignore="TextContrastCheck" />
+</LinearLayout>

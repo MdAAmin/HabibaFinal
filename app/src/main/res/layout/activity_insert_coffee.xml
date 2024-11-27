@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#14D45C00"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Header  -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Insert Product"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        tools:ignore="HardcodedText" />
+
+    <!--  Name -->
+    <EditText
+        android:id="@+id/et_product_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:autofillHints=""
+        android:hint="Product Name"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textColor="#F2960071"
+        android:textColorHint="#546E7A"
+        tools:ignore="HardcodedText,VisualLintTextFieldSize" />
+
+    <!-- Price -->
+    <EditText
+        android:id="@+id/et_product_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:autofillHints=""
+        android:hint="Product Price"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
+        android:textColor="#f2960071"
+        android:textColorHint="#546E7A"
+        tools:ignore="Autofill,HardcodedText,VisualLintTextFieldSize" />
+
+    <!--  quantity -->
+    <EditText
+        android:id="@+id/et_product_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Product Quantity"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:textColor="#f2960071"
+        android:textColorHint="#546E7A"
+        tools:ignore="Autofill,HardcodedText,VisualLintTextFieldSize" />
+
+
+    <ImageView
+        android:id="@+id/iv_selected_image"
+        android:layout_width="match_parent"
+        android:layout_height="167dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/selected_image"
+        android:scaleType="fitCenter"
+        android:src="@drawable/photo2"
+        tools:ignore="RedundantDescriptionCheck" />
+
+
+    <Button
+        android:id="@+id/btn_select_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/select_image"
+        android:textColor="#C5E1A5"
+        tools:ignore="VisualLintButtonSize" />
+
+
+    <Button
+        android:id="@+id/btn_insert_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/insert_product"
+        android:textColor="#C5E1A5"
+        tools:ignore="DuplicateSpeakableTextCheck,VisualLintButtonSize" />
+
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        tools:ignore="VisualLintButtonSize" />
+
+</LinearLayout>

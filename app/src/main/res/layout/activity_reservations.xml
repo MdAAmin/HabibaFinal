@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Reservation Details -->
+    <TextView
+        android:id="@+id/textViewReservationDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reservation_details"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:paddingBottom="16dp"/>
+
+    <!-- Name Input -->
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="@string/name"
+        android:inputType="textPersonName"
+        android:paddingBottom="16dp"
+        tools:ignore="VisualLintTextFieldSize" />
+
+    <!-- Phone Number Input -->
+    <EditText
+        android:id="@+id/editTextPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/phone_number"
+        android:inputType="phone"
+        android:paddingBottom="16dp"
+        tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
+
+    <!-- Number of Guests Input -->
+    <EditText
+        android:id="@+id/editTextGuests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="@string/number_of_guests"
+        android:inputType="number"
+        android:paddingBottom="16dp"
+        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+    <!-- Date Input -->
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="@string/date_mm_dd_yyyy"
+        android:inputType="date"
+        android:paddingBottom="16dp"
+        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+    <!-- Time Input -->
+    <EditText
+        android:id="@+id/editTextTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/time_hh_mm_am_pm"
+        android:inputType="time"
+        android:paddingBottom="16dp"
+        tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
+
+    <!-- Special Requests Input -->
+    <EditText
+        android:id="@+id/editTextRequests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/special_requests"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:paddingBottom="16dp"
+        tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
+
+    <!-- Reserve Button -->
+    <Button
+        android:id="@+id/buttonReserve"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reserve_now"
+        android:textColor="@color/black"
+        android:background="@color/cardview_shadow_start_color"
+        android:layout_marginTop="24dp"
+        tools:ignore="VisualLintButtonSize" />
+
+</LinearLayout>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#CEA6AFE3"
+    android:background="#E675AF4C"
     android:padding="16dp">
 
     <TextView
@@ -13,17 +13,17 @@
         android:layout_gravity="center"
         android:layout_marginTop="48dp"
         android:layout_marginBottom="48dp"
-        android:text="@string/admin_signup"
+        android:text="@string/user_login"
         android:textSize="18sp"
         android:textColor="#000000" />
 
-    <!-- Username  -->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/admin_name"
-        android:textSize="18sp"
-        android:textColor="#000000" />
+        android:text="@string/user_name1"
+        android:textColor="#000000"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/usernameEditText"
@@ -32,19 +32,20 @@
         android:layout_marginTop="8dp"
         android:autofillHints=""
         android:background="#FFFFFF"
-        android:hint="@string/enter_admin_name"
+        android:drawableLeft="@drawable/baseline_person_24"
+        android:drawablePadding="8dp"
+        android:hint="@string/enter_username"
         android:inputType="text"
         android:padding="12dp"
         android:textColor="#000000"
         android:textSize="18sp"
         tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
-    <!-- Password  -->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:autofillHints=""
         android:text="@string/password"
         android:textSize="18sp"
         android:textColor="#000000" />
@@ -53,32 +54,35 @@
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:background="#FFFFFF"
-        android:hint="@string/enter_your_password"
+        android:drawableLeft="@drawable/baseline_key_24"
+        android:drawablePadding="8dp"
+        android:hint="@string/enter_password"
         android:inputType="textPassword"
         android:padding="12dp"
         android:textColor="#000000"
         android:textSize="18sp"
-        tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
+        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
-    <!-- Submit Button -->
+
     <Button
         android:id="@+id/submitBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/submit"
+        android:text="@string/submit2"
         android:textSize="18sp"
         android:backgroundTint="#1976D2"
         android:textColor="#FFFFFF"
         android:layout_marginTop="100dp"
         tools:ignore="VisualLintButtonSize" />
 
-    <!-- Back Button -->
+
     <Button
         android:id="@+id/backBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/back"
+        android:text="@string/back2"
         android:textSize="18sp"
         android:backgroundTint="#757575"
         android:textColor="#FFFFFF"
