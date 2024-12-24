@@ -1,73 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity_facilities"
-    android:background="#7E03A9F4"
+    tools:context=".Facilities"
+    android:background="#D9EAFB"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/tVTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/choose_your_facilities"
+        android:text="Choose Your Facilities"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="#333333"
         android:gravity="center"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="48dp" />
 
     <Button
         android:id="@+id/buttonMenuDisplay"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:padding="16dp"
-        android:text="@string/menu_display"
-        tools:ignore="VisualLintButtonSize" />
-
-    <Button
-        android:id="@+id/buttonNotifications"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="16dp"
-        android:padding="16dp"
-        android:text="@string/notifications"
-        tools:ignore="VisualLintButtonSize" />
+        android:padding="12dp"
+        android:text="Menu Display"
+        android:textColor="#FFFFFF"
+        android:background="#5C6BC0"
+        android:fontFamily="sans-serif-medium"
+        android:elevation="6dp"
+        android:cornerRadius="12dp" />
 
     <Button
         android:id="@+id/buttonOrderPlacement"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:padding="16dp"
-        android:text="@string/order_placement"
-        tools:ignore="VisualLintButtonSize" />
-
-    <Button
-        android:id="@+id/buttonPayment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="16dp"
-        android:padding="16dp"
-        android:text="@string/payment"
-        tools:ignore="VisualLintButtonSize" />
+        android:background="#66BB6A"
+        android:cornerRadius="12dp"
+        android:elevation="6dp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="12dp"
+        android:text="Order Placement"
+        android:textColor="#FFFFFF"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/buttonReservation"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="16dp"
-        android:text="@string/reservation"
-        tools:ignore="VisualLintButtonSize" />
+        android:layout_height="wrap_content"
+        android:background="#FF7043"
+        android:cornerRadius="12dp"
+        android:elevation="6dp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="12dp"
+        android:text="Reservation"
+        android:textColor="#FFFFFF"
+        tools:ignore="TextContrastCheck" />
 
 </LinearLayout>
