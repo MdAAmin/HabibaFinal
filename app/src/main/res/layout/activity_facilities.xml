@@ -29,36 +29,30 @@
         android:padding="12dp"
         android:text="Menu Display"
         android:textColor="#FFFFFF"
-        android:background="#5C6BC0"
+        android:backgroundTint="#5C6BC0"
         android:fontFamily="sans-serif-medium"
-        android:elevation="6dp"
-        android:cornerRadius="12dp" />
+        android:elevation="6dp" />
 
     <Button
         android:id="@+id/buttonOrderPlacement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:background="#66BB6A"
-        android:cornerRadius="12dp"
-        android:elevation="6dp"
-        android:fontFamily="sans-serif-medium"
         android:padding="12dp"
         android:text="Order Placement"
         android:textColor="#FFFFFF"
-        tools:ignore="TextContrastCheck" />
+        android:backgroundTint="#66BB6A"
+        android:fontFamily="sans-serif-medium"
+        android:elevation="6dp" />
 
     <Button
         android:id="@+id/buttonReservation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FF7043"
-        android:cornerRadius="12dp"
-        android:elevation="6dp"
-        android:fontFamily="sans-serif-medium"
         android:padding="12dp"
         android:text="Reservation"
         android:textColor="#FFFFFF"
-        tools:ignore="TextContrastCheck" />
-
+        android:backgroundTint="#FF7043"
+        android:fontFamily="sans-serif-medium"
+        android:elevation="6dp" />
 </LinearLayout>
