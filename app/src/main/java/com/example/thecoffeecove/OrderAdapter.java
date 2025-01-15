@@ -1,57 +1,56 @@
 package com.example.thecoffeecove;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 import android.widget.TextView;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.NumberFormat;
-import java.util.Locale;
+public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
-public class OrderAdapter extends CursorAdapter {
+    private Cursor cursor;
 
-    public OrderAdapter(Context context, Cursor cursor, int flags) {
-        super(context, cursor, flags);
-    }
-
-    private static class ViewHolder {
-        TextView productNameTextView;
-        TextView priceTextView;
-        TextView quantityTextView;
-    }
-
-    @SuppressLint("MissingInflatedId")
-    @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.order_list_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder();
-        viewHolder.productNameTextView = view.findViewById(R.id.orderProductNameTextView);
-        viewHolder.priceTextView = view.findViewById(R.id.orderPriceTextView);
-        viewHolder.quantityTextView = view.findViewById(R.id.orderQuantityTextView);
-        view.setTag(viewHolder);
-        return view;
+    public OrderAdapter(Cursor cursor) {
+        this.cursor = cursor;
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+    public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_list_item, parent, false);
+        return new OrderViewHolder(view);
+    }
 
-        @SuppressLint("Range") String productName = cursor.getString(cursor.getColumnIndex(Database_Helper.COLUMN_PRODUCT_NAME));
-        @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex(Database_Helper.COLUMN_PRODUCT_PRICE));
-        @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex(Database_Helper.COLUMN_PRODUCT_QUANTITY));
+    @Override
+    public void onBindViewHolder(OrderViewHolder holder, int position) {
+        if (cursor != null && cursor.moveToPosition(position)) {
+            String productName = cursor.getString(cursor.getColumnIndex(Database_Helper.COLUMN_ORDER_PRODUCT_NAME));
+            String coffeeType = cursor.getString(cursor.getColumnIndex(Database_Helper.COLUMN_ORDER_COFFEE_TYPE));
+            double price = cursor.getDouble(cursor.getColumnIndex(Database_Helper.COLUMN_ORDER_PRICE));
+            int quantity = cursor.getInt(cursor.getColumnIndex(Database_Helper.COLUMN_ORDER_QUANTITY));
 
-        // Format the price as currency
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
-        String formattedPrice = currencyFormat.format(price);
+            holder.productName.setText(productName);
+            holder.coffeeType.setText(coffeeType);
+            holder.price.setText(String.valueOf(price));
+            holder.quantity.setText(String.valueOf(quantity));
+        }
+    }
 
-        // Set the values to the corresponding TextViews
-        viewHolder.productNameTextView.setText(productName);
-        viewHolder.priceTextView.setText(formattedPrice);
-        viewHolder.quantityTextView.setText(String.valueOf(quantity));
+    @Override
+    public int getItemCount() {
+        return cursor != null ? cursor.getCount() : 0;
+    }
+
+    public static class OrderViewHolder extends RecyclerView.ViewHolder {
+
+        TextView productName, coffeeType, price, quantity;
+
+        public OrderViewHolder(View itemView) {
+            super(itemView);
+            productName = itemView.findViewById(R.id.tv_order_name);
+            coffeeType = itemView.findViewById(R.id.tv_coffee_type);
+            price = itemView.findViewById(R.id.tv_order_price);
+            quantity = itemView.findViewById(R.id.tv_order_quantity);
+        }
     }
 }

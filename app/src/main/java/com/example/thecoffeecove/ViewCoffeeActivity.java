@@ -28,7 +28,6 @@ public class ViewCoffeeActivity extends AppCompatActivity {
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the Update button click
                 handleUpdate();
             }
         });
@@ -36,17 +35,17 @@ public class ViewCoffeeActivity extends AppCompatActivity {
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the Delete button click
                 handleDelete();
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh
         displayProducts();
     }
+
 
     private void displayProducts() {
         Cursor cursor = databaseHelper.getAllProducts();

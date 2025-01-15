@@ -5,120 +5,152 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class New_User extends AppCompatActivity {
 
-    private final String USERNAME_REGEX = "^[a-zA-Z0-9._-]{3,15}$"; // Alphanumeric, 3-15 characters
-    private final String EMAIL_REGEX = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,4}$"; // Standard email pattern
-    private final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=])[A-Za-z\\d@#$%^&+=]{8}$"; // 8 chars, includes uppercase, lowercase, digit, and special char
-    private final String PHONE_REGEX = "^01[3-9][0-9]{8}$"; // Valid phone number pattern for Bangladesh
+    private EditText usernameEditText, emailEditText, passEditText, confirmPassEditText, phoneEditText;
+    private Button submitButton, backButton;
+    private ProgressBar progressBar;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
 
-    Database_Helper dbHelper;
-
-    EditText etUsername, etEmail, etPassword, etConfirmPassword, etMobile;
-    Button btnSubmit, btnBack;
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private static final String PHONE_REGEX = "^01[3-9]\\d{8}$";
+    private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+    private static final String NAME_REGEX = "^[a-zA-Z\\s]+$"; // Regex for name validation
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_user);
 
-        dbHelper = new Database_Helper(this);
+        // Initialize Firebase instances
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
-        etUsername = findViewById(R.id.et_register_username);
-        etEmail = findViewById(R.id.et_register_email);
-        etPassword = findViewById(R.id.et_register_password);
-        etConfirmPassword = findViewById(R.id.et_register_confirm_password);
-        etMobile = findViewById(R.id.et_register_mobile);
+        // Initialize UI elements
+        usernameEditText = findViewById(R.id.et_register_username);
+        emailEditText = findViewById(R.id.et_register_email);
+        passEditText = findViewById(R.id.et_register_password);
+        confirmPassEditText = findViewById(R.id.et_register_confirm_password);
+        phoneEditText = findViewById(R.id.et_register_mobile);
+        submitButton = findViewById(R.id.btn_submit);
+        backButton = findViewById(R.id.btn_Back);
+        progressBar = findViewById(R.id.progressBar);
 
-        btnSubmit = findViewById(R.id.btn_submit);
-        btnBack = findViewById(R.id.btn_Back);
+        // Submit button click event
+        submitButton.setOnClickListener(v -> {
+            String username = usernameEditText.getText().toString();
+            String email = emailEditText.getText().toString();
+            String pass = passEditText.getText().toString();
+            String confirmPass = confirmPassEditText.getText().toString();
+            String phone = phoneEditText.getText().toString();
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = etUsername.getText().toString().trim();
-                String email = etEmail.getText().toString().trim();
-                String password = etPassword.getText().toString();
-                String confirmPassword = etConfirmPassword.getText().toString();
-                String mobile = etMobile.getText().toString().trim();
+            progressBar.setVisibility(View.VISIBLE);
 
-                if (validateInputs(username, email, password, confirmPassword, mobile)) {
-                    boolean success = dbHelper.addUser(username, password, email, mobile);
-                    if (success) {
-                        Toast.makeText(New_User.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(New_User.this, Facilities.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(New_User.this, "Failed to register user", Toast.LENGTH_SHORT).show();
-                    }
-                }
+            // Input validation
+            if (!validateInputs(username, email, pass, confirmPass, phone)) {
+                progressBar.setVisibility(View.GONE);
+                return;
             }
+
+            // Create a new user with Firebase Authentication
+            firebaseAuth.createUserWithEmailAndPassword(email, pass)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressBar.setVisibility(View.GONE);
+
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = firebaseAuth.getCurrentUser();
+                                if (user != null) {
+                                    // Send email verification
+                                    user.sendEmailVerification()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    Toast.makeText(New_User.this, "Verification email sent!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+
+                                    // Store user details in Firestore
+                                    storeUserDetailsInFirestore(user, username, email, phone);
+                                }
+
+                                Toast.makeText(New_User.this, "User registration successful! Please verify your email.", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(New_User.this, Old_User.class));
+                                finish();
+                            } else {
+                                Toast.makeText(New_User.this, "Registration failed! Try again.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
         });
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(New_User.this, Showing.class);
-                startActivity(intent);
-            }
-        });
+        // Back button click event
+        backButton.setOnClickListener(v -> finish()); // Close the activity
     }
 
-    private boolean validateInputs(String username, String email, String password, String confirmPassword, String mobile) {
+    private boolean validateInputs(String username, String email, String pass, String confirmPass, String phone) {
         if (username.isEmpty()) {
-            etUsername.setError("Username is required");
-            etUsername.requestFocus();
-            return false;
+            setError(usernameEditText, "Username cannot be empty!");
+        } else if (!username.matches(NAME_REGEX)) {
+            setError(usernameEditText, "Invalid name format! Only letters and spaces are allowed.");
+        } else if (email.isEmpty()) {
+            setError(emailEditText, "Email cannot be empty!");
+        } else if (!email.matches(EMAIL_REGEX)) {
+            setError(emailEditText, "Invalid email format!");
+        } else if (pass.isEmpty()) {
+            setError(passEditText, "Password cannot be empty!");
+        } else if (!pass.matches(PASSWORD_REGEX)) {
+            setError(passEditText, "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character, and be at least 8 characters long!");
+        } else if (!pass.equals(confirmPass)) {
+            setError(confirmPassEditText, "Passwords do not match!");
+        } else if (phone.isEmpty()) {
+            setError(phoneEditText, "Phone number cannot be empty!");
+        } else if (!phone.matches(PHONE_REGEX)) {
+            setError(phoneEditText, "Invalid phone number!");
+        } else {
+            return true;
         }
-        if (!username.matches(USERNAME_REGEX)) {
-            etUsername.setError("Username must be 3-15 characters, alphanumeric with '.', '_', or '-'");
-            etUsername.requestFocus();
-            return false;
-        }
-        if (email.isEmpty()) {
-            etEmail.setError("Email is required");
-            etEmail.requestFocus();
-            return false;
-        }
-        if (!email.matches(EMAIL_REGEX)) {
-            etEmail.setError("Enter a valid email address");
-            etEmail.requestFocus();
-            return false;
-        }
-        if (password.isEmpty()) {
-            etPassword.setError("Password is required");
-            etPassword.requestFocus();
-            return false;
-        }
-        if (!password.matches(PASSWORD_REGEX)) {
-            etPassword.setError("Password must be exactly 8 characters, include uppercase, lowercase, digit, and special character");
-            etPassword.requestFocus();
-            return false;
-        }
-        if (confirmPassword.isEmpty()) {
-            etConfirmPassword.setError("Confirm Password is required");
-            etConfirmPassword.requestFocus();
-            return false;
-        }
-        if (!password.equals(confirmPassword)) {
-            etConfirmPassword.setError("Passwords do not match");
-            etConfirmPassword.requestFocus();
-            return false;
-        }
-        if (mobile.isEmpty()) {
-            etMobile.setError("Mobile number is required");
-            etMobile.requestFocus();
-            return false;
-        }
-        if (!mobile.matches(PHONE_REGEX)) {
-            etMobile.setError("Enter a valid Bangladeshi mobile number starting with 013-019");
-            etMobile.requestFocus();
-            return false;
-        }
-        return true;
+        return false;
+    }
+
+    private void setError(EditText editText, String message) {
+        editText.setError(message);
+        editText.requestFocus();
+    }
+
+    // Store user details in Firestore
+    private void storeUserDetailsInFirestore(FirebaseUser user, String username, String email, String phone) {
+        String userId = user.getUid();
+        Map<String, Object> userDetails = new HashMap<>();
+        userDetails.put("username", username);
+        userDetails.put("email", email);
+        userDetails.put("phone", phone.isEmpty() ? "No phone number" : phone);
+
+        DocumentReference userDocRef = firebaseFirestore.collection("users").document(userId);
+        userDocRef.set(userDetails)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getApplicationContext(), "User details saved to Firestore", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getApplicationContext(), "Failed to save user details to Firestore", Toast.LENGTH_SHORT).show();
+                });
     }
 }

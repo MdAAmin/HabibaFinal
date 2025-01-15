@@ -1,48 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    <TextView
+        android:id="@+id/tv_order_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Product Name" />
 
-        <TextView
-            android:id="@+id/orderProductNameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="8dp"
-            android:text="Product Name"
-            android:textColor="@color/black"
-            android:background="@drawable/button_background"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingBottom="4dp" />
+    <TextView
+        android:id="@+id/tv_coffee_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Coffee Type" />
 
-        <TextView
-            android:id="@+id/orderPriceTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="8dp"
-            android:text="Product Price"
-            android:textColor="@color/black"
-            android:background="@drawable/button_background"
-            android:textSize="16sp"
-            android:paddingBottom="4dp" />
+    <TextView
+        android:id="@+id/tv_order_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price" />
 
-        <TextView
-            android:id="@+id/orderQuantityTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="8dp"
-            android:text="Product Quantity"
-            android:textColor="@color/black"
-            android:background="@drawable/button_background"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
+    <TextView
+        android:id="@+id/tv_order_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity" />
 </LinearLayout>

@@ -1,19 +1,23 @@
 package com.example.thecoffeecove;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
-
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ViewOrderCoffeeActivity extends AppCompatActivity {
 
-    private ListView orderListView;
+    private RecyclerView recyclerViewOrder;
     private Database_Helper databaseHelper;
-    private OrderAdapter orderAdapter;
+    private RadioGroup coffeeTypeRadioGroup;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -21,33 +25,37 @@ public class ViewOrderCoffeeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_order_coffee);
 
-        // Initialize ListView and Button views
-        orderListView = findViewById(R.id.orderListView);
-        Button buttonBack = findViewById(R.id.btn_back8);
+        // Initialize views and database helper
+        recyclerViewOrder = findViewById(R.id.recyclerViewOrders); // Correct reference to the RecyclerView
+        coffeeTypeRadioGroup = findViewById(R.id.radio_group_order_instructions); // Radio group for selecting coffee
+        Button btnBack = findViewById(R.id.btn_back);
 
-        // Set the OnClickListener for the back button
-        buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();  // Simply finish the activity to return to the previous screen
-            }
-        });
-
-        // Initialize DatabaseHelper
         databaseHelper = new Database_Helper(this);
 
-        // Get orders from database and set up the adapter
-        loadOrders();
+        // Set RecyclerView properties
+        recyclerViewOrder.setLayoutManager(new LinearLayoutManager(this));
+
+        // Display orders when the activity is created
+        displayOrders();
+
+        // Set up the back button
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(ViewOrderCoffeeActivity.this, Admin_Home.class);
+            startActivity(intent);
+        });
     }
 
-    private void loadOrders() {
-        // Query to get all orders from the database
+    private void displayOrders() {
+        // Fetch all orders from the database
         Cursor cursor = databaseHelper.getAllOrders();
 
-        if (cursor != null) {
-            // Initialize and set the adapter for the ListView
-            orderAdapter = new OrderAdapter(this, cursor, 0);
-            orderListView.setAdapter(orderAdapter);
+        // Check if the cursor is valid and has data
+        if (cursor != null && cursor.getCount() > 0) {
+            // Create an adapter with the cursor data
+            OrderAdapter orderAdapter = new OrderAdapter(cursor);
+            recyclerViewOrder.setAdapter(orderAdapter);
+        } else {
+            Toast.makeText(this, "No orders found", Toast.LENGTH_SHORT).show();
         }
     }
 }

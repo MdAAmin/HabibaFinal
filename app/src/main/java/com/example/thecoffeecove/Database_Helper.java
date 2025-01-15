@@ -5,29 +5,36 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class Database_Helper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "hiba.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // Updated version to handle database upgrades
 
     // Table Names
     private static final String TABLE_ADMIN = "admin";
-    private static final String TABLE_USER = "user";
     private static final String TABLE_PRODUCT = "product";
+    private static final String TABLE_ORDERS = "orders"; // Added orders table
 
-    //  Column Names
+    // Column Names for Admin Table
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_PASSWORD = "password";
-    public static final String COLUMN_EMAIL = "email";
-    public static final String COLUMN_PHONE = "phone";
 
     // Product Table Column Names
     public static final String COLUMN_PRODUCT_NAME = "name";
     public static final String COLUMN_PRODUCT_PRICE = "price";
     public static final String COLUMN_PRODUCT_QUANTITY = "quantity";
     public static final String COLUMN_PRODUCT_IMAGE = "image";
+
+    // Orders Table Column Names
+    public static final String COLUMN_ORDER_ID = "_id"; // Order ID
+    public static final String COLUMN_ORDER_PRODUCT_NAME = "product_name";
+    public static final String COLUMN_ORDER_PRICE = "price";
+    public static final String COLUMN_ORDER_QUANTITY = "quantity";
+    public static final String COLUMN_ORDER_INSTRUCTION = "order_instruction"; // Added column for order instructions
+    public static final String COLUMN_ORDER_COFFEE_TYPE = "coffee_type";  // Added coffee type column
 
     // Default Admin
     private static final String DEFAULT_ADMIN_USERNAME = "habiba";
@@ -39,20 +46,14 @@ public class Database_Helper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Create Admin Table
         String CREATE_ADMIN_TABLE = "CREATE TABLE " + TABLE_ADMIN + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_USERNAME + " TEXT,"
                 + COLUMN_PASSWORD + " TEXT" + ")";
         db.execSQL(CREATE_ADMIN_TABLE);
 
-        String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COLUMN_USERNAME + " TEXT,"
-                + COLUMN_PASSWORD + " TEXT,"
-                + COLUMN_EMAIL + " TEXT,"
-                + COLUMN_PHONE + " TEXT" + ")";
-        db.execSQL(CREATE_USER_TABLE);
-
+        // Create Product Table
         String CREATE_PRODUCT_TABLE = "CREATE TABLE " + TABLE_PRODUCT + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_PRODUCT_NAME + " TEXT,"
@@ -61,6 +62,15 @@ public class Database_Helper extends SQLiteOpenHelper {
                 + COLUMN_PRODUCT_IMAGE + " BLOB" + ")";
         db.execSQL(CREATE_PRODUCT_TABLE);
 
+        // Create Orders Table with coffee type
+        String CREATE_ORDERS_TABLE = "CREATE TABLE " + TABLE_ORDERS + "("
+                + COLUMN_ORDER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_ORDER_PRODUCT_NAME + " TEXT,"
+                + COLUMN_ORDER_PRICE + " REAL,"
+                + COLUMN_ORDER_QUANTITY + " INTEGER,"
+                + COLUMN_ORDER_COFFEE_TYPE + " TEXT" + ")"; // Added coffee_type
+        db.execSQL(CREATE_ORDERS_TABLE);
+
         // Add a default admin user
         addAdmin(db, DEFAULT_ADMIN_USERNAME, DEFAULT_ADMIN_PASSWORD);
     }
@@ -68,10 +78,16 @@ public class Database_Helper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
-            db.execSQL("ALTER TABLE " + TABLE_USER + " ADD COLUMN " + COLUMN_EMAIL + " TEXT");
-            db.execSQL("ALTER TABLE " + TABLE_USER + " ADD COLUMN " + COLUMN_PHONE + " TEXT");
+            // Add the orders table if upgrading from version 1
+            String CREATE_ORDERS_TABLE = "CREATE TABLE " + TABLE_ORDERS + "("
+                    + COLUMN_ORDER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + COLUMN_ORDER_PRODUCT_NAME + " TEXT,"
+                    + COLUMN_ORDER_PRICE + " REAL,"
+                    + COLUMN_ORDER_QUANTITY + " INTEGER,"
+                    + COLUMN_ORDER_INSTRUCTION + " TEXT,"
+                    + COLUMN_ORDER_COFFEE_TYPE + " TEXT" + ")"; // Added coffee_type
+            db.execSQL(CREATE_ORDERS_TABLE);
         }
-        // Handle other versions if needed
     }
 
     private void addAdmin(SQLiteDatabase db, String username, String password) {
@@ -81,24 +97,8 @@ public class Database_Helper extends SQLiteOpenHelper {
         db.insert(TABLE_ADMIN, null, values);
     }
 
-    public boolean addUser(String username, String password, String email, String phone) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_USERNAME, username);
-        values.put(COLUMN_PASSWORD, password);
-        values.put(COLUMN_EMAIL, email);
-        values.put(COLUMN_PHONE, phone);
-        db.insert(TABLE_USER, null, values);
-        db.close(); // Close the database connection
-        return true;
-    }
-
     public boolean checkAdmin(String username, String password) {
         return checkCredentials(TABLE_ADMIN, username, password);
-    }
-
-    public boolean checkUser(String username, String password) {
-        return checkCredentials(TABLE_USER, username, password);
     }
 
     private boolean checkCredentials(String tableName, String username, String password) {
@@ -120,7 +120,7 @@ public class Database_Helper extends SQLiteOpenHelper {
         values.put(COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(COLUMN_PRODUCT_IMAGE, imageByteArray);
         db.insert(TABLE_PRODUCT, null, values);
-        db.close(); // Close connection
+        db.close();
     }
 
     public Cursor getAllProducts() {
@@ -153,21 +153,23 @@ public class Database_Helper extends SQLiteOpenHelper {
         db.update(TABLE_PRODUCT, values, COLUMN_ID + " = ?", new String[]{String.valueOf(productId)});
         db.close();
     }
-    public void insertOrder(String productName, double productPrice, int productQuantity) {
+
+    public boolean insertOrder(String productName, double price, int quantity, String coffeeType) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_PRODUCT_NAME, productName);
-        values.put(COLUMN_PRODUCT_PRICE, productPrice);
-        values.put(COLUMN_PRODUCT_QUANTITY, productQuantity);
-        db.insert("orders", null, values);  // "orders" table should exist
+        values.put(COLUMN_ORDER_PRODUCT_NAME, productName);
+        values.put(COLUMN_ORDER_PRICE, price);
+        values.put(COLUMN_ORDER_QUANTITY, quantity);
+        values.put(COLUMN_ORDER_COFFEE_TYPE, coffeeType); // Insert coffee type
+
+        long result = db.insert(TABLE_ORDERS, null, values);
         db.close();
+
+        return result != -1; // Return true if insert was successful, false otherwise
     }
+
     public Cursor getAllOrders() {
         SQLiteDatabase db = this.getReadableDatabase();
-        // Query to select all columns from the orders table
-        String query = "SELECT * FROM orders";
-        return db.rawQuery(query, null);
+        return db.query(TABLE_ORDERS, null, null, null, null, null, null);
     }
-
-
 }

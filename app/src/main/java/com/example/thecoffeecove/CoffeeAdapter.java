@@ -20,30 +20,37 @@ public class CoffeeAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        // Inflate the row layout for each item
         LayoutInflater inflater = LayoutInflater.from(context);
         return inflater.inflate(R.layout.activity_coffee_list_item, parent, false);
     }
 
-    @SuppressLint("DefaultLocale")
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        // Find views in the layout
         TextView nameTextView = view.findViewById(R.id.text_view_product_name);
         TextView priceTextView = view.findViewById(R.id.text_view_product_price);
+        TextView quantityTextView = view.findViewById(R.id.text_view_product_quantity);
         ImageView productImageView = view.findViewById(R.id.image_view_product);
 
+        // Extract data from the cursor
         String name = cursor.getString(cursor.getColumnIndexOrThrow(Database_Helper.COLUMN_PRODUCT_NAME));
         double price = cursor.getDouble(cursor.getColumnIndexOrThrow(Database_Helper.COLUMN_PRODUCT_PRICE));
+        int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(Database_Helper.COLUMN_PRODUCT_QUANTITY));
         byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(Database_Helper.COLUMN_PRODUCT_IMAGE));
 
-        // Set text and image
-        nameTextView.setText(name);
-        priceTextView.setText(String.format("$%.2f", price));
+        // Set data to the views
+        nameTextView.setText("Name: " + name);
+        priceTextView.setText(String.format("Price: $%.2f", price)); // Corrected formatting
+        quantityTextView.setText("Quantity: " + quantity);
 
-        if (imageBytes != null) {
+        // Decode and set the product image, handle null image case
+        if (imageBytes != null && imageBytes.length > 0) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
             productImageView.setImageBitmap(bitmap);
         } else {
-            productImageView.setImageResource(R.drawable.img); // Set default image
+            // Set a default image or placeholder if imageBytes is null
+            productImageView.setImageResource(R.drawable.img);
         }
     }
 }

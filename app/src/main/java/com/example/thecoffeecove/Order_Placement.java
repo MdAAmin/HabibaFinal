@@ -19,7 +19,7 @@ public class Order_Placement extends AppCompatActivity {
     private RadioGroup radioGroupOrderInstructions;
     private Button buttonPlaceOrder;
 
-    private Database_Helper Database_Helper;
+    private Database_Helper dbHelper; // Corrected name for the object
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -33,12 +33,14 @@ public class Order_Placement extends AppCompatActivity {
         radioGroupOrderInstructions = findViewById(R.id.radio_group_order_instructions);
         buttonPlaceOrder = findViewById(R.id.button_place_order);
 
+        // Initialize the Database_Helper
+        dbHelper = new Database_Helper(this); // Correct initialization
+
         Intent intent = getIntent();
         String productName = intent.getStringExtra("productName");
         double productPrice = intent.getDoubleExtra("productPrice", 0.0);
         int productQuantity = intent.getIntExtra("productQuantity", 0);
 
-        // Set the product details to the TextViews
         textViewProductName.setText(productName);
         textViewProductPrice.setText(String.format("$%.2f", productPrice));
         textViewProductQuantity.setText("Quantity: " + productQuantity);
@@ -51,19 +53,25 @@ public class Order_Placement extends AppCompatActivity {
                 String selectedOption = selectedRadioButton.getText().toString();
 
                 if (!productName.isEmpty() && productPrice != 0.0 && productQuantity != 0) {
-                    // Display a toast message
-                    Toast.makeText(Order_Placement.this, "Order successful for " + selectedOption + "!", Toast.LENGTH_SHORT).show();
+                    // Call the insertOrder method on the initialized dbHelper object
+                    boolean orderInserted = dbHelper.insertOrder(productName, productPrice, productQuantity, selectedOption);
 
-                    // Clear fields after a successful order
+                    if (orderInserted) {
+                        Toast.makeText(Order_Placement.this, "Order successful for " + selectedOption + "!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(Order_Placement.this, "Order failed. Please try again.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Clear the fields after placing the order
                     textViewProductName.setText("");
                     textViewProductPrice.setText("");
                     textViewProductQuantity.setText("");
                     radioGroupOrderInstructions.clearCheck();
                 }
             } else {
-                // Display a message if no option is selected
                 Toast.makeText(Order_Placement.this, "Please select an option (Home or Cove)", Toast.LENGTH_SHORT).show();
             }
         });
     }
 }
+

@@ -92,4 +92,5 @@
     <string name="delete">delete</string>
     <string name="view_coffee" />
     <string name="high_quality">High Quality</string>
+    <string name="Username" />
 </resources>
