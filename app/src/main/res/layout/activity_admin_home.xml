@@ -35,11 +35,11 @@
         android:id="@+id/btn_view_product"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:background="@drawable/button_background"
+        android:padding="16dp"
         android:text="View Coffee"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
     <Button
         android:id="@+id/btn_view_order_product"
         android:layout_width="wrap_content"
@@ -47,6 +47,7 @@
         android:padding="16dp"
         android:background="@drawable/button_background"
         android:text="View Order Coffee"
+        android:layout_marginTop="8dp"
         android:textStyle="bold"
         android:textColor="#FFFFFF" />
 

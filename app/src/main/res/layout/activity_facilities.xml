@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:padding="12dp"
-        android:text="Order Placement"
+        android:text="High Demand "
         android:textColor="#FFFFFF"
         android:backgroundTint="#66BB6A"
         android:fontFamily="sans-serif-medium"

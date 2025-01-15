@@ -29,7 +29,7 @@ public class Facilities extends AppCompatActivity {
         buttonOrderPlacement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Facilities.this, Order_Placement.class);
+                Intent intent = new Intent(Facilities.this, PersonalizedRecommendationsActivity.class);
                 startActivity(intent);
             }
         });

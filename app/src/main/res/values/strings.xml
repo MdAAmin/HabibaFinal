@@ -91,4 +91,5 @@
     <string name="update">update</string>
     <string name="delete">delete</string>
     <string name="view_coffee" />
+    <string name="high_quality">High Quality</string>
 </resources>

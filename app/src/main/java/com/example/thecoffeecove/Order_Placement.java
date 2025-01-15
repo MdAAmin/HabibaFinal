@@ -4,7 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +16,10 @@ public class Order_Placement extends AppCompatActivity {
     private TextView textViewProductName;
     private TextView textViewProductPrice;
     private TextView textViewProductQuantity;
-    private EditText editTextOrderInstructions;
+    private RadioGroup radioGroupOrderInstructions;
     private Button buttonPlaceOrder;
+
+    private Database_Helper Database_Helper;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -27,7 +30,7 @@ public class Order_Placement extends AppCompatActivity {
         textViewProductName = findViewById(R.id.text_view_product_name);
         textViewProductPrice = findViewById(R.id.text_view_product_price);
         textViewProductQuantity = findViewById(R.id.text_view_product_quantity);
-        editTextOrderInstructions = findViewById(R.id.edit_text_order_instructions);
+        radioGroupOrderInstructions = findViewById(R.id.radio_group_order_instructions);
         buttonPlaceOrder = findViewById(R.id.button_place_order);
 
         Intent intent = getIntent();
@@ -40,16 +43,26 @@ public class Order_Placement extends AppCompatActivity {
         textViewProductPrice.setText(String.format("$%.2f", productPrice));
         textViewProductQuantity.setText("Quantity: " + productQuantity);
 
-
         buttonPlaceOrder.setOnClickListener(view -> {
-            // Check if all fields are filled
-            String orderInstructions = editTextOrderInstructions.getText().toString().trim();
-            if (!productName.isEmpty() && productPrice != 0.0 && productQuantity != 0) {
-                // Display  toast message
-                Toast.makeText(Order_Placement.this, "Order successful!", Toast.LENGTH_SHORT).show();
+            int selectedOptionId = radioGroupOrderInstructions.getCheckedRadioButtonId();
+
+            if (selectedOptionId != -1) {
+                RadioButton selectedRadioButton = findViewById(selectedOptionId);
+                String selectedOption = selectedRadioButton.getText().toString();
+
+                if (!productName.isEmpty() && productPrice != 0.0 && productQuantity != 0) {
+                    // Display a toast message
+                    Toast.makeText(Order_Placement.this, "Order successful for " + selectedOption + "!", Toast.LENGTH_SHORT).show();
+
+                    // Clear fields after a successful order
+                    textViewProductName.setText("");
+                    textViewProductPrice.setText("");
+                    textViewProductQuantity.setText("");
+                    radioGroupOrderInstructions.clearCheck();
+                }
             } else {
-                //  all fields must be filled
-                Toast.makeText(Order_Placement.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                // Display a message if no option is selected
+                Toast.makeText(Order_Placement.this, "Please select an option (Home or Cove)", Toast.LENGTH_SHORT).show();
             }
         });
     }
