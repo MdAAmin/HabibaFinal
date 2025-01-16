@@ -15,7 +15,6 @@ public class Facilities extends AppCompatActivity {
 
         Button buttonMenuDisplay = findViewById(R.id.buttonMenuDisplay);
         Button buttonOrderPlacement = findViewById(R.id.buttonOrderPlacement);
-        Button buttonReservation = findViewById(R.id.buttonReservation);
 
         buttonMenuDisplay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,12 +34,5 @@ public class Facilities extends AppCompatActivity {
         });
 
 
-        buttonReservation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Facilities.this, Reservations.class);
-                startActivity(intent);
-            }
-        });
     }
 }
